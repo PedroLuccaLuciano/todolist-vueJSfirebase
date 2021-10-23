@@ -1,28 +1,67 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Header :nome="nome" />
+    <main class="content">
+      <div class="row">
+        <input type="text" v-model="novaTarefa">
+        <button @click.prevent="adicionarTarefa">Adicionar</button>
+      </div>
+      <div class="tasks">
+        <ul>
+          <li v-for="(tarefa, index) of tarefas" :key="index">
+            <input type="checkbox" v-model="tarefa.checked">
+            <span :class="{ riscado: tarefa.checked }">{{ tarefa.nome }}</span>
+          </li>
+        </ul>
+        <input type="text" v-model="nome" placeholder="Altere aqui seu nome">
+      </div>
+      <Footer />
+    </main>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  components: {Header, Footer},
+  data() {
+    return {
+      novaTarefa: '',
+      tarefas: [],
+      nome: ''
+    }
+  }, methods: {
+    adicionarTarefa() {
+      if (this.novaTarefa != '') {
+        this.tarefas.push({
+        nome: this.novaTarefa,
+        checked: false
+        })
+        this.novaTarefa = ''
+      }
+    }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.content {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 30px 0;
+}
+.row input{
+  width: 300px;
+}
+.tasks ul{
+  margin: 30px 0;
+}
+.riscado {
+  color: gray;
+  text-decoration: line-through;
 }
 </style>
